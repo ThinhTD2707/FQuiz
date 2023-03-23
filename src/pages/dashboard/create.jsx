@@ -24,11 +24,15 @@ import { number } from "prop-types";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { linkWithCredential, reload } from "firebase/auth";
+import { useSubmit } from "react-router-dom";
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from 'react-toastify';
 
 export function Create() {
   // const [formValues, setFormValues] = useState([{ titleQuestion: "", answer1: "", answer2: "" }])
   // const isoTime = currentTime.toISOString();
   const universitiesList = [
+    'Choice University',
     'FPT',
     'UEH',
     'BKU',
@@ -43,6 +47,7 @@ export function Create() {
   ];
   const [selectedUniversity, setSelectedUniversity] = useState("");
   const categoriesList = [
+    'Choice Category',
     'Math',
     'Literature',
     'History',
@@ -86,6 +91,7 @@ export function Create() {
       }
     ],
     status: true,
+    timeLimit: 30,
     university: ""
   });
 
@@ -106,7 +112,7 @@ export function Create() {
   //   'http://18.143.173.183:8080/course/getCourses',
   //   config
   // ).then(res => console.log(res.data)).catch(console.log);
-
+  const notify = () => toast("Wow so easy!");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -115,8 +121,17 @@ export function Create() {
         ,
           headerAxios
       );
-      console.log(resq);
       // navitage("/dashboard/update")
+      toast.success('Create Successfully', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } catch (error) {
       console.error(error.response);
     }
@@ -125,6 +140,12 @@ export function Create() {
     setCourse({
       ...course,
       name: event.target.value,
+    });
+  };
+  const handleTimeLimit = (event) => {
+    setCourse({
+      ...course,
+      timeLimit: event.target.value,
     });
   };
   const handleDescriptionChange = (event) => {
@@ -204,6 +225,7 @@ export function Create() {
   return (
     <div>
       <div>
+        <form>
         <Card className="max-w overflow-hidden rounded-md">
           <CardHeader
             floated={false}
@@ -218,7 +240,7 @@ export function Create() {
           <CardBody >
             <div className="flex flex-col pb-3">
               <Typography className="font-bold">Title</Typography >
-              <Input onChange={handleNameChange} placeholder="Enter a title, like Biology - chappter 4"></Input>
+              <Input onChange={handleNameChange} placeholder="Enter a title, like Biology - chappter 4" required></Input>
               <Typography className="font-bold">Description</Typography >
               <Input onChange={handleDescriptionChange} placeholder="Add a description"></Input>
               <Typography className="font-bold">Choose categories</Typography >
@@ -241,7 +263,7 @@ export function Create() {
             <div className="flex gap-28">
               <div>
                 <p>Time limit</p>
-                <Input className=" lg:w-80" placeholder="Enter time limit"></Input>
+                <Input className=" lg:w-80" type="number" onChange={handleTimeLimit}  max="10000" placeholder="Enter time limit"></Input>
                 <p>University</p>
                 <div className="relative h-10 w-72 min-w-[200px]">
                   <select value={selectedUniversity}
@@ -325,9 +347,11 @@ export function Create() {
           </CardBody>
           <CardFooter className="flex flex-col gap-3">
             <Button fullWidth onClick={() => addQuestionAndAnswer()}>Add one more question</Button>
-            <Button fullWidth onClick={handleSubmit}>Create course</Button>
+            <Button fullWidth value="submit" onClick={handleSubmit}>Create course</Button>
+            <ToastContainer />
           </CardFooter>
         </Card>
+        </form>
       </div>
     </div>
   );

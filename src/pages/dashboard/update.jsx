@@ -27,10 +27,19 @@ import { useParams } from "react-router-dom";
 import axios from "axios";
 import { linkWithCredential } from "firebase/auth";
 import { async } from "@firebase/util";
-
+import Modal from './modal';
 export function Update() {
   // const [formValues, setFormValues] = useState([{ titleQuestion: "", answer1: "", answer2: "" }])
   // const isoTime = currentTime.toISOString();
+  const [modalOpen, setModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setModalOpen(true);
+  }
+
+  const handleCloseModal = () => {
+    setModalOpen(false);
+  }
   const universitiesList = [
     'FPT',
     'UEH',
@@ -209,13 +218,20 @@ export function Update() {
       const resq = await axios.post(`http://18.143.173.183:8080/course/editCourse/${id}`,
         course, headerAxios
       );
-      // console.log(resq.data);
+      toast.success('Update Successfully', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     } catch (error) {
-      console.error(error.response);
+      console.error(error);
     }
   }
-
-
 
   console.log(course);
 
@@ -227,11 +243,13 @@ export function Update() {
             floated={false}
             shadow={false}
             color="transparent"
-            className="m-0 rounded-none bg-light-blue-900"
+            className="m-0 rounded-none bg-light-blue-900 flex flex-row justify-between items-center"
           >
             <Typography variant="h3" color="white" className="p-3 text-white">
               UPDATE A QUIZ
             </Typography>
+            <Button onClick={handleOpenModal}>Delete</Button>
+      {modalOpen && <Modal onClose={handleCloseModal} />}
           </CardHeader>
           <CardBody >
             <div className="flex flex-col pb-3">

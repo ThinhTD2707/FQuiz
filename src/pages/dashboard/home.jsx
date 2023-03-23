@@ -43,6 +43,29 @@ export function Home() {
   // console.log(currentUser);
   const [course, setCourse] = useState();
   const [question, setQuestion] = useState();
+  const [answer, setAnswer] = useState({
+    answerList: []
+  });
+
+  const handleCheckboxChange = (e) => {
+    const isChecked = e.target.checked;
+    const value = e.target.value;
+
+    if (isChecked) {
+      setAnswer({
+        ...answer,
+        answerList: [...answer.answerList, value]
+      });
+    } else {
+      setAnswer({
+        ...answer,
+        answerList: answer.answerList.filter((item) => item !== value)
+      });
+    }
+  };
+
+  console.log(answer)
+
 
   useEffect(() => {
     const getAllCourseApi = () => {
@@ -89,7 +112,33 @@ export function Home() {
     };
     getAllCourseApi();
   }, []);
-  console.log(course)
+
+
+  const accessToken = localStorage.getItem('token');
+  const headerAxios = {
+    headers: {
+      Authorization: accessToken,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:5173',
+      'accept': '*/*',
+      'Access-Control-Allow-Methods': 'POST, PUT, PATCH, GET, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization'
+    }
+  };
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      const resq = await axios.post('http://18.143.173.183:8080/answer/result/19',
+      answer
+        ,
+          headerAxios
+      );
+      console.log(resq);
+      // navitage("/dashboard/update")
+    } catch (error) {
+      console.error(error);
+    }
+  }
   return (
     <div className="mt-12">
       <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-1 xl:grid-cols-2">
@@ -160,12 +209,17 @@ export function Home() {
               </Typography>
               {test.answers.map((answer, answerIndex) => (
               <div className="flex flex-col text-lg" key={answerIndex}>
-                <Checkbox label={answer.content} />
+                <Checkbox   key={answer.id}
+                label={answer.content}
+                value={answer.id}
+                onChange={handleCheckboxChange}  />
               </div>
               ))}
+              
             </CardBody>
           </Card>
           ))}
+          <Button onClick={handleSubmit}>check grade</Button>
         </div>
 
 
