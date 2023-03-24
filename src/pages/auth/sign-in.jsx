@@ -14,13 +14,24 @@ import {
   Button,
   Typography,
 } from "@material-tailwind/react";
-
+import { ToastContainer, toast } from 'react-toastify';
 
 
 export function SignIn() {
   const navitage = useNavigate();
   
   const [value, setValue] = useState("");
+  const accessToken = localStorage.getItem('token');
+  const headerAxios = {
+    headers: {
+      Authorization: accessToken,
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': 'http://localhost:5173',
+      'accept': '*/*',
+      'Access-Control-Allow-Methods': 'POST, PUT, PATCH, GET, DELETE, OPTIONS',
+      'Access-Control-Allow-Headers': 'Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization'
+    }
+  };
   const signInWithGoogle = async () => {
     try {
       const userCredential = await signInWithPopup(auth, provider);
@@ -41,7 +52,7 @@ export function SignIn() {
       axios.post('http://18.143.173.183:8080/auth/login', {
         email: user.email,
         password: '123456'
-      }
+      },headerAxios
       )
         .then(function (response) {
           console.log(response)
@@ -50,7 +61,19 @@ export function SignIn() {
           const tokenType = response.data.tokenType;
           localStorage.setItem('token', tokenType + " " + token);
           localStorage.setItem("user", JSON.stringify(user));
-          navitage("/dashboard/home")
+          toast.success('Log in Successfully', {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "light",
+            });
+            setTimeout(function () {
+              navitage('/dashboard/home');
+            }, 5000);
           // console.log(response)
         })
         .catch(function (error) {
@@ -125,6 +148,7 @@ export function SignIn() {
                 <Button variant="gradient" fullWidth>
                   Sign In
                 </Button>
+                <ToastContainer/>
                 <Typography variant="small" className="mt-6 flex justify-center">
                   Don't have an account?
                   <Link to="/auth/sign-up">
