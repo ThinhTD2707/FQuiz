@@ -64,7 +64,7 @@ export function Home() {
     }
   };
 
-  console.log(answer)
+  console.log(currentUser)
 
 
   useEffect(() => {
@@ -141,7 +141,7 @@ export function Home() {
   }
   return (
     <div className="mt-12">
-      <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-1 xl:grid-cols-2">
+      <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-1 xl:grid-cols-3">
         {/* {statisticsCardsData.map(({ icon, title, footer, ...rest }) => (
           <StatisticsCard
             key={title}
@@ -166,63 +166,6 @@ export function Home() {
             <div>{item.university}, {item.category}</div>
           </div>
         ))}
-
-        
-        <div className="flex flex-row-reverse gap-5">
-          <Card className="w-[30%] overflow-hidden h-fit">
-            <CardHeader
-              floated={false}
-              shadow={false}
-              className="mt-4 ">
-              <Typography variant="h5" color="blue-gray">
-                List questions
-              </Typography>
-            </CardHeader>
-            <CardBody className="flex flex-row flex-wrap p-2 gap-2">
-              <Button size="sm" >1</Button>
-              <Button size="sm" >2</Button>
-              <Button size="sm" >3</Button>
-              <Button size="sm" >4</Button>
-              <Button size="sm" >5</Button>
-              <Button size="sm" >6</Button>
-              <Button size="sm" >7</Button>
-              <Button size="sm" >8</Button>
-              <Button size="sm" >9</Button>
-              <Button size="sm" >10</Button>
-            </CardBody>
-          </Card>
-          {/* do quiz */}
-          {question && question.map((test, index) => (
-          <Card className="w-full overflow-hidden " key={index}>
-            <CardHeader
-              floated={false}
-              shadow={false}
-              className="mt-4 "
-            >
-              <Typography variant="h4" color="blue-gray">
-                Question {index + 1 }
-              </Typography>
-            </CardHeader>
-            <CardBody className="">
-              <Typography variant="h5" color="blue-gray">
-                {test.content}
-              </Typography>
-              {test.answers.map((answer, answerIndex) => (
-              <div className="flex flex-col text-lg" key={answerIndex}>
-                <Checkbox   key={answer.id}
-                label={answer.content}
-                value={answer.id}
-                onChange={handleCheckboxChange}  />
-              </div>
-              ))}
-              
-            </CardBody>
-          </Card>
-          ))}
-          <Button onClick={handleSubmit}>check grade</Button>
-        </div>
-
-
 
 
 

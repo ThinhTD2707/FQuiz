@@ -23,16 +23,23 @@ import {
 
 import { number } from "prop-types";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import { linkWithCredential } from "firebase/auth";
 import { async } from "@firebase/util";
 import Modal from './modal';
+import { ToastContainer, toast } from 'react-toastify';
+
+
 export function Update() {
   // const [formValues, setFormValues] = useState([{ titleQuestion: "", answer1: "", answer2: "" }])
   // const isoTime = currentTime.toISOString();
   const [modalOpen, setModalOpen] = useState(false);
+  const navitage = useNavigate();
 
+  const handleClick = () => {
+    navitage(`/dashboard/home`);
+  }
   const handleOpenModal = () => {
     setModalOpen(true);
   }
@@ -93,13 +100,14 @@ export function Update() {
           answers: [
             {
               content: "",
-              correct: true
+              correct: ""
             }
           ],
           updatedAt: ""
         }
       ],
       status: true,
+      timeLimit: "",
       university: ""
     });
 
@@ -143,6 +151,12 @@ export function Update() {
     setCourse({
       ...course,
       status: event.target.checked,
+    });
+  };
+  const handleTimeLimit = (event) => {
+    setCourse({
+      ...course,
+      timeLimit: event.target.value,
     });
   };
 
@@ -200,14 +214,31 @@ export function Update() {
 
   useEffect(() => {
     const getCourseApi = () => {
-      axios.get(
-        `http://18.143.173.183:8080/course/getCourse/${id}`,
-        headerAxios
-      )
-        .then(res => setCourse(res.data))
-        .catch(err => console.log(err));
+      axios
+        .get(`http://18.143.173.183:8080/course/getCourse/${id}`, headerAxios)
+        .then((res) => {
+          const mappedData = {
+            category: res.data.category,
+            description: res.data.description,
+            name: res.data.name,
+            questions: res.data.questions.map((question) => ({
+              content: question.content,
+              answerOption: question.answerOption,
+              answers: question.answers.map((answer) => ({
+                content: answer.content,
+                correct: answer.correct
+              })),
+              updatedAt: question.updatedAt
+            })),
+            status: res.data.status,
+            timeLimit: res.data.timeLimit,
+            university: res.data.university
+          };
+          setCourse(mappedData);
+        })
+        .catch((err) => console.log(err));
     };
-    console.log('dem')
+    console.log("dem");
     getCourseApi();
   }, [id]);
 
@@ -216,8 +247,10 @@ export function Update() {
     e.preventDefault();
     try {
       const resq = await axios.post(`http://18.143.173.183:8080/course/editCourse/${id}`,
-        course, headerAxios
-      );
+        course,
+        headerAxios
+      )
+      
       toast.success('Update Successfully', {
         position: "top-right",
         autoClose: 5000,
@@ -229,6 +262,16 @@ export function Update() {
         theme: "light",
         });
     } catch (error) {
+      toast.error('Update failed', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
       console.error(error);
     }
   }
@@ -277,7 +320,7 @@ export function Update() {
             <div className="flex gap-28">
               <div>
                 <p>Time limit</p>
-                <Input className=" lg:w-80" placeholder="Enter time limit"></Input>
+                <Input value={course.timeLimit} onChange={handleTimeLimit} className=" lg:w-80" placeholder="Enter time limit"></Input>
                 <p>University</p>
                 <div class="relative h-10 w-72 min-w-[200px]">
                   <select value={selectedUniversity}
@@ -363,10 +406,11 @@ export function Update() {
           <CardFooter>
             <Button fullWidth onClick={() => addQuestionAndAnswer()}>Add one more question</Button>
             <div className="flex flex-row mt-5 gap-5">
-              <Button color="red" fullWidth >Cancel</Button>
+              <Button color="red" fullWidth onClick={() => handleClick()} >Cancel</Button>
               <Button variant="gradient" className="flex items-center gap-3" fullWidth onClick={handleSubmit}>
-                <CloudArrowUpIcon strokeWidth={2} className="h-5 w-5" /> Upload Files
+                <CloudArrowUpIcon strokeWidth={2} className="h-5 w-5" /> Update Course
               </Button>
+              <ToastContainer />
             </div>
           </CardFooter>
         </Card>

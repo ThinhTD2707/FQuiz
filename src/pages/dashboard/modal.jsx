@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { ToastContainer, toast } from 'react-toastify';
 
 const Modal = ({ onClose }) => {
   const { id } = useParams();
   const accessToken = localStorage.getItem('token');
+  const navitage = useNavigate();
   const headerAxios = {
     headers: {
       Authorization: accessToken,
@@ -26,8 +28,32 @@ const Modal = ({ onClose }) => {
     try {
       const response = await axios.delete(`http://18.143.173.183:8080/course/deleteCourse/${id}`, headerAxios);
       console.log('delete thanh cong');
+      toast.success('Delete Successfully', {
+        position: "top-right",
+        autoClose: 2000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
+      // navitage(`/dashboard/home`)
+      setTimeout(function () {
+        navitage('/dashboard/home');
+      }, 2000);
     } catch (error) {
       console.error(error);
+      toast.error('Delete Fail', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+      });
     }
   }
   return (
@@ -55,11 +81,7 @@ const Modal = ({ onClose }) => {
             {/*body*/}
             <div className="relative p-6 flex-auto">
               <p className="my-4 text-slate-500 text-lg leading-relaxed">
-                I always felt like I could do anything. That’s the main
-                thing people are controlled by! Thoughts- their perception
-                of themselves! They're slowed down by their perception of
-                themselves. If you're taught you can’t do anything, you
-                won’t do anything. I was taught I could do everything.
+                Do you want to delete?
               </p>
             </div>
             {/*footer*/}
@@ -78,6 +100,7 @@ const Modal = ({ onClose }) => {
               >
                 Delete
               </button>
+              <ToastContainer />
             </div>
           </div>
         </div>

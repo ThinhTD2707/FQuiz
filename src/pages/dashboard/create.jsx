@@ -134,6 +134,16 @@ export function Create() {
         });
     } catch (error) {
       console.error(error.response);
+      toast.error('Create Failed', {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        });
     }
   }
   const handleNameChange = (event) => {
