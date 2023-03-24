@@ -213,7 +213,7 @@ export function Update() {
   const { id } = useParams();
 
   useEffect(() => {
-    const getCourseApi = () => {
+    const getCourseById = () => {
       axios
         .get(`http://18.143.173.183:8080/course/getCourse/${id}`, headerAxios)
         .then((res) => {
@@ -239,7 +239,7 @@ export function Update() {
         .catch((err) => console.log(err));
     };
     console.log("dem");
-    getCourseApi();
+    getCourseById();
   }, [id]);
 
 

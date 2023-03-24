@@ -56,7 +56,7 @@ export const routes = [
       {
         icon: <BellIcon {...icon} />,
         name: "Test",
-        path: "/test",
+        path: "/test/:id",
         element: <Test />,
       },
     ],

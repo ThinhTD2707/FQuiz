@@ -22,7 +22,7 @@ import {
   Cog6ToothIcon,
   PencilIcon,
 } from "@heroicons/react/24/solid";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { platformSettingsData, conversationsData, projectsData } from "@/data";
 import { useContext, useEffect, useState, Fragment } from "react";
@@ -36,10 +36,10 @@ export function Profile() {
   const [file, setFile] = useState("");
   const handleOpen = () => setOpen(!open);
   const { currentUser } = useContext(AuthContext);
-  const [details, setDetails] = useState('initialState');
+  const [details, setDetails] = useState('');
   const [per, setPerc] = useState(null);
   const [data, setData] = useState({});
-
+  const navitage = useNavigate();
   // console.log(currentUser)
 
   useEffect(() => {
@@ -83,11 +83,10 @@ export function Profile() {
 
 
   useEffect(() => {
-    const docRef = doc(db, "users", (!currentUser ? " " : currentUser.uid))
-
+    const docRef = doc(db, "users", currentUser.uid)
     getDoc(docRef)
       .then((doc) => {
-        console.log(doc.data().img)
+        console.log(doc.data())
         setDetails(doc.data())
       })
       .catch((error) => {
@@ -99,11 +98,11 @@ export function Profile() {
 
   const handleUpdateImg = async (e) => {
     e.preventDefault();
+    // console.log(data)
     try {
       await setDoc(doc(db, "users", currentUser.uid), {
         name: currentUser.displayName,
         email: currentUser.email,
-        password: "123456",
         img: data.img,
         timeStamp: serverTimestamp(),
       });

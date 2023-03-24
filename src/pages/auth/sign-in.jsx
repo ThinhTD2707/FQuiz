@@ -42,12 +42,12 @@ export function SignIn() {
       console.log(user.displayName)
       console.log(user.email)
 
-      const usersCollectionRef = doc(db, "users", user.uid);
-      await setDoc(usersCollectionRef, {
-         img: user.photoURL,
-         timeStamp: serverTimestamp()
-        });
-        navitage(-1)
+      // const usersCollectionRef = doc(db, "users", user.uid);
+      // await setDoc(usersCollectionRef, {
+      //    img: user.photoURL,
+      //    timeStamp: serverTimestamp()
+      //   });
+      //   navitage(-1)
 
       axios.post('http://18.143.173.183:8080/auth/login', {
         email: user.email,
@@ -148,7 +148,6 @@ export function SignIn() {
                 <Button variant="gradient" fullWidth>
                   Sign In
                 </Button>
-                <ToastContainer/>
                 <Typography variant="small" className="mt-6 flex justify-center">
                   Don't have an account?
                   <Link to="/auth/sign-up">
@@ -164,6 +163,7 @@ export function SignIn() {
                 </Typography>
               </CardFooter>
             </Card>
+            <ToastContainer/>
           </form>
       </div>
     </>

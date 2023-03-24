@@ -24,13 +24,14 @@ import { number } from "prop-types";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { linkWithCredential, reload } from "firebase/auth";
-import { useSubmit } from "react-router-dom";
+import { useNavigate, useSubmit } from "react-router-dom";
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer, toast } from 'react-toastify';
 
 export function Create() {
   // const [formValues, setFormValues] = useState([{ titleQuestion: "", answer1: "", answer2: "" }])
   // const isoTime = currentTime.toISOString();
+  const navitage = useNavigate();
   const universitiesList = [
     'Choice University',
     'FPT',
@@ -99,7 +100,7 @@ export function Create() {
     const newQuestions = [...questions];
     newQuestions.splice(index, 1);
     setQuestions(newQuestions);
-  }
+}
 
   function deleteAnswer(questionIndex, answerIndex) {
     const newQuestions = [...questions];
@@ -112,7 +113,6 @@ export function Create() {
   //   'http://18.143.173.183:8080/course/getCourses',
   //   config
   // ).then(res => console.log(res.data)).catch(console.log);
-  const notify = () => toast("Wow so easy!");
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -124,7 +124,7 @@ export function Create() {
       // navitage("/dashboard/update")
       toast.success('Create Successfully', {
         position: "top-right",
-        autoClose: 5000,
+        autoClose: 2000,
         hideProgressBar: false,
         closeOnClick: true,
         pauseOnHover: true,
@@ -132,6 +132,9 @@ export function Create() {
         progress: undefined,
         theme: "light",
         });
+        setTimeout(function () {
+          navitage('/dashboard/home');
+        }, 2000);
     } catch (error) {
       console.error(error.response);
       toast.error('Create Failed', {

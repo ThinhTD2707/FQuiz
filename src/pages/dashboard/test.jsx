@@ -10,12 +10,13 @@ import {
 } from "@material-tailwind/react";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import UseAuth from "../../config/UseAuth";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 
 export function Test() {
     const accessToken = localStorage.getItem('token');
+    const { id } = useParams();
     const headerAxios = {
         headers: {
             Authorization: accessToken,
@@ -31,16 +32,17 @@ export function Test() {
     });
     const [course, setCourse] = useState();
     const [question, setQuestion] = useState();
+    const [grade, setGrade] = useState();
 
     useEffect(() => {
         const getAllCourseApi = () => {
             const token = localStorage.getItem('token');
             axios.get(
-                `http://18.143.173.183:8080/course/getQuestion/19`,
+                `http://18.143.173.183:8080/course/getQuestion/${id}`,
                 headerAxios
             )
-                // .then(res => setQuestion(res.data))
-                .then(res => console.log(res.data))
+                .then(res => setQuestion(res.data))
+                // .then(res => setCourse(res.data))
                 .catch(err => console.log(err));
         };
         getAllCourseApi();
@@ -49,7 +51,6 @@ export function Test() {
     const handleCheckboxChange = (e) => {
         const isChecked = e.target.checked;
         const value = e.target.value;
-
         if (isChecked) {
             setAnswer({
                 ...answer,
@@ -63,16 +64,18 @@ export function Test() {
         }
     };
 
+    console.log(answer)
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const resq = await axios.post('http://18.143.173.183:8080/answer/result/19',
+            const resq = await axios.post('http://18.143.173.183:8080/answer/result/49',
                 answer
                 ,
                 headerAxios
             );
             console.log(resq);
-            // navitage("/dashboard/update")
+            setGrade(resq.data)
         } catch (error) {
             console.error(error);
         }
@@ -107,8 +110,13 @@ export function Test() {
                                 <Button size="sm" >10</Button>
                             </CardBody>
                         </Card>
+                        <Typography>{grade ? grade : ""}</Typography>
                         {/* do quiz */}
-                        {/* {question && question.map((test, index) => (
+
+
+                        
+                        <div className="w-full flex flex-col gap-5">
+                        {question && question.map((test, index) => (
                             <Card className="w-full overflow-hidden " key={index}>
                                 <CardHeader
                                     floated={false}
@@ -125,80 +133,15 @@ export function Test() {
                                     </Typography>
                                     {test.answers.map((answer, answerIndex) => (
                                         <div className="flex flex-col text-lg" key={answerIndex}>
-                                            <Checkbox key={answer.id}
+                                            <Checkbox
                                                 label={answer.content}
                                                 value={answer.id}
                                                 onChange={handleCheckboxChange} />
                                         </div>
                                     ))}
-
                                 </CardBody>
                             </Card>
-                        ))} */}
-                        <div className="w-full flex flex-col gap-5">
-                        <Card className="w-full overflow-hidden ">
-                            <CardHeader
-                                floated={false}
-                                shadow={false}
-                                className="mt-4 "
-                            >
-                                <Typography variant="h4" color="blue-gray">
-                                    Question
-                                </Typography>
-                            </CardHeader>
-                            <CardBody className="">
-                                <Typography variant="h5" color="blue-gray">
-                                    Content
-                                </Typography>
-                                <div className="flex flex-col text-lg" >
-                                    <Checkbox label="Ahuhu" />
-                                    <Checkbox label="Ahuhu" />
-                                    <Checkbox label="Ahuhu" />
-                                </div>
-                            </CardBody>
-                        </Card>
-                        <Card className="w-full overflow-hidden ">
-                            <CardHeader
-                                floated={false}
-                                shadow={false}
-                                className="mt-4 "
-                            >
-                                <Typography variant="h4" color="blue-gray">
-                                    Question
-                                </Typography>
-                            </CardHeader>
-                            <CardBody className="">
-                                <Typography variant="h5" color="blue-gray">
-                                    Content
-                                </Typography>
-                                <div className="flex flex-col text-lg" >
-                                    <Checkbox label="Ahuhu" />
-                                    <Checkbox label="Ahuhu" />
-                                    <Checkbox label="Ahuhu" />
-                                </div>
-                            </CardBody>
-                        </Card>
-                        <Card className="w-full overflow-hidden ">
-                            <CardHeader
-                                floated={false}
-                                shadow={false}
-                                className="mt-4 "
-                            >
-                                <Typography variant="h4" color="blue-gray">
-                                    Question
-                                </Typography>
-                            </CardHeader>
-                            <CardBody className="">
-                                <Typography variant="h5" color="blue-gray">
-                                    Content
-                                </Typography>
-                                <div className="flex flex-col text-lg" >
-                                    <Checkbox label="Ahuhu" />
-                                    <Checkbox label="Ahuhu" />
-                                    <Checkbox label="Ahuhu" />
-                                </div>
-                            </CardBody>
-                        </Card>
+                        ))}
                         
                         <Button onClick={handleSubmit}>check grade</Button>
                         </div>
