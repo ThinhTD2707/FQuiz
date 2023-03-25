@@ -41,6 +41,9 @@ export function Home() {
   const handleClick = (e) => {
     navitage(`/dashboard/test/${e}`);
   }
+  const changeToUpdate = (e) => {
+    navitage(`/dashboard/update/${e}`);
+  }
   // console.log(currentUser);
   const [course, setCourse] = useState();
   const [question, setQuestion] = useState();
@@ -166,14 +169,14 @@ export function Home() {
              shadow={false}
              color="transparent"
              className="m-0 rounded-none h-1/2 shadow-md"
-             
+             onClick={() => changeToUpdate(item.id)}
            >
              <img
                src="https://topicanative.edu.vn/wp-content/uploads/2020/08/nang-cap-von-tu-vung-tieng-anh-cuc-dinh-thong-qua-quiz-kiem-tra-2.jpg"
                alt="ui/ux review check"
              />
            </CardHeader>
-           <CardBody>
+           <CardBody onClick={() => changeToUpdate(item.id)}>
              <Typography variant="h4" color="blue-gray">
                {item.name}
              </Typography>

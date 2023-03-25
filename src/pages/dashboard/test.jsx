@@ -66,20 +66,19 @@ export function Test() {
 
     console.log(answer)
 
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-        try {
-            const resq = await axios.post('http://18.143.173.183:8080/answer/result/49',
-                answer
-                ,
-                headerAxios
-            );
-            console.log(resq);
-            setGrade(resq.data)
-        } catch (error) {
-            console.error(error);
-        }
+const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+        const resq = await axios.post(`http://18.143.173.183:8080/answer/result/${id}`,
+            answer,
+            headerAxios
+        );
+        console.log(resq);
+        setGrade(resq.data)
+    } catch (error) {
+        console.error(error);
     }
+}
 
 
     return (
