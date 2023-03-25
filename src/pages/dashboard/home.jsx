@@ -4,6 +4,7 @@ import {
   Card,
   CardHeader,
   CardBody,
+  CardFooter,
   IconButton,
   Menu,
   MenuHandler,
@@ -38,7 +39,7 @@ export function Home() {
   const currentUser = UseAuth();
   const navitage = useNavigate();
   const handleClick = (e) => {
-    navitage(`/dashboard/update/${e}`);
+    navitage(`/dashboard/test/${e}`);
   }
   // console.log(currentUser);
   const [course, setCourse] = useState();
@@ -159,12 +160,33 @@ export function Home() {
           />
         ))} */}
         {course && course.map((item) => (
-          <div className="flex flex-col bg-gray-50 shadow-xl p-3 gap-2" onClick={() => handleClick(item.id)}>
-            <div className="font-bold text-xl">{item.name}
-            </div>
-            <div>{item.description}</div>
-            <div>{item.university}, {item.category}</div>
-          </div>
+           <Card className="max-w-[24rem] overflow-hidden" >
+           <CardHeader
+             floated={false}
+             shadow={false}
+             color="transparent"
+             className="m-0 rounded-none h-1/2 shadow-md"
+             
+           >
+             <img
+               src="https://topicanative.edu.vn/wp-content/uploads/2020/08/nang-cap-von-tu-vung-tieng-anh-cuc-dinh-thong-qua-quiz-kiem-tra-2.jpg"
+               alt="ui/ux review check"
+             />
+           </CardHeader>
+           <CardBody>
+             <Typography variant="h4" color="blue-gray">
+               {item.name}
+             </Typography>
+             <Typography variant="11px" color="gray" className="mt-3 font-normal">
+               {item.description}
+             </Typography>
+           </CardBody>
+           <CardFooter className="flex items-center justify-between">
+             <div className="flex items-center -space-x-3">
+             </div>
+             <Button className="font-bold w-fit" onClick={() => handleClick(item.id)}>Do test</Button>
+           </CardFooter>
+         </Card>
         ))}
 
 

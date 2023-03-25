@@ -88,62 +88,53 @@ export function Test() {
                 <div className="mb-12 grid gap-y-10 gap-x-6 md:grid-cols-1 xl:grid-cols-1">
                     <div className="flex flex-row-reverse gap-5 w-full">
                         {/* List question */}
-                        <Card className="w-[30%] overflow-hidden h-fit">
-                            <CardHeader
-                                floated={false}
-                                shadow={false}
-                                className="mt-4 ">
-                                <Typography variant="h5" color="blue-gray">
-                                    List questions
-                                </Typography>
-                            </CardHeader>
-                            <CardBody className="flex flex-row flex-wrap p-2 gap-2">
-                                <Button size="sm" >1</Button>
-                                <Button size="sm" >2</Button>
-                                <Button size="sm" >3</Button>
-                                <Button size="sm" >4</Button>
-                                <Button size="sm" >5</Button>
-                                <Button size="sm" >6</Button>
-                                <Button size="sm" >7</Button>
-                                <Button size="sm" >8</Button>
-                                <Button size="sm" >9</Button>
-                                <Button size="sm" >10</Button>
-                            </CardBody>
-                        </Card>
-                        <Typography>{grade ? grade : ""}</Typography>
+                        {grade ? (
+                            <Card className="w-[30%] overflow-hidden h-fit">
+                                <CardHeader floated={false} shadow={false} className="mt-4">
+                                    <Typography variant="h6" color="blue-gray">
+                                        Your Score
+                                    </Typography>
+                                </CardHeader>
+                                <CardBody className="flex flex-row flex-wrap p-4">
+                                    <Typography color="blue" variant="h2">{grade}</Typography>
+                                </CardBody>
+                            </Card>
+                        ) : null}
+
+
                         {/* do quiz */}
 
 
-                        
+
                         <div className="w-full flex flex-col gap-5">
-                        {question && question.map((test, index) => (
-                            <Card className="w-full overflow-hidden " key={index}>
-                                <CardHeader
-                                    floated={false}
-                                    shadow={false}
-                                    className="mt-4 "
-                                >
-                                    <Typography variant="h4" color="blue-gray">
-                                        Question {index + 1}
-                                    </Typography>
-                                </CardHeader>
-                                <CardBody className="">
-                                    <Typography variant="h5" color="blue-gray">
-                                        {test.content}
-                                    </Typography>
-                                    {test.answers.map((answer, answerIndex) => (
-                                        <div className="flex flex-col text-lg" key={answerIndex}>
-                                            <Checkbox
-                                                label={answer.content}
-                                                value={answer.id}
-                                                onChange={handleCheckboxChange} />
-                                        </div>
-                                    ))}
-                                </CardBody>
-                            </Card>
-                        ))}
-                        
-                        <Button onClick={handleSubmit}>check grade</Button>
+                            {question && question.map((test, index) => (
+                                <Card className="w-full overflow-hidden " key={index}>
+                                    <CardHeader
+                                        floated={false}
+                                        shadow={false}
+                                        className="mt-4 "
+                                    >
+                                        <Typography variant="h4" color="blue-gray">
+                                            Question {index + 1}
+                                        </Typography>
+                                    </CardHeader>
+                                    <CardBody className="">
+                                        <Typography variant="h5" color="blue-gray">
+                                            {test.content}
+                                        </Typography>
+                                        {test.answers.map((answer, answerIndex) => (
+                                            <div className="flex flex-col text-lg" key={answerIndex}>
+                                                <Checkbox
+                                                    label={answer.content}
+                                                    value={answer.id}
+                                                    onChange={handleCheckboxChange} />
+                                            </div>
+                                        ))}
+                                    </CardBody>
+                                </Card>
+                            ))}
+
+                            <Button onClick={handleSubmit}>check grade</Button>
                         </div>
                     </div>
 

@@ -91,7 +91,7 @@ export function Create() {
         updatedAt: ""
       }
     ],
-    status: true,
+    status: false,
     timeLimit: 30,
     university: ""
   });

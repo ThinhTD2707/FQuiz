@@ -27,7 +27,7 @@ import { ProfileInfoCard, MessageCard } from "@/widgets/cards";
 import { platformSettingsData, conversationsData, projectsData } from "@/data";
 import { useContext, useEffect, useState, Fragment } from "react";
 import { AuthContext } from "../../context/AuthContext"
-import { doc, getDoc, setDoc, serverTimestamp  } from "firebase/firestore";
+import { doc, getDoc, setDoc, serverTimestamp } from "firebase/firestore";
 import { db, storage } from "../../config/firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
 
@@ -92,7 +92,7 @@ export function Profile() {
       .catch((error) => {
         console.log("Error getting document:", error);
       });
-  
+
   }, [currentUser])
 
 
@@ -103,6 +103,7 @@ export function Profile() {
       await setDoc(doc(db, "users", currentUser.uid), {
         name: currentUser.displayName,
         email: currentUser.email,
+        rule: "user",
         img: data.img,
         timeStamp: serverTimestamp(),
       });
