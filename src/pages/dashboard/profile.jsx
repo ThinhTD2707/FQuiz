@@ -101,9 +101,9 @@ export function Profile() {
     // console.log(data)
     try {
       await setDoc(doc(db, "users", currentUser.uid), {
-        name: currentUser.displayName,
+        username: currentUser.displayName,
         email: currentUser.email,
-        rule: "user",
+        role: "user",
         img: data.img,
         timeStamp: serverTimestamp(),
       });
